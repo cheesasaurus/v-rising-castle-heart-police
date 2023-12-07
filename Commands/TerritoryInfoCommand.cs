@@ -1,6 +1,8 @@
 using System;
+using System.Text;
 using Bloodstone.API;
 using CastleHeartPolice.Utils;
+using ProjectM.Terrain;
 using Unity.Mathematics;
 using Unity.Transforms;
 using VampireCommandFramework;
@@ -15,9 +17,20 @@ public class TerritoryInfoCommand {
         var worldPos = WorldPositionOfPlayerCharacter(ctx);
         var blockCoords = TerritoryUtil.BlockCoordinatesFromWorldPosition(worldPos);
 
-        ctx.Reply($"WorldPosition: {FormatFloat(worldPos.x)} {FormatFloat(worldPos.y)} {FormatFloat(worldPos.z)}");
-        ctx.Reply($"BlockCoordinates: {blockCoords.x} {blockCoords.y}");
-        // todo: zone id, etc
+        var message = new StringBuilder("Territory Information\n");
+
+        if (TerritoryUtil.TryFindTerritoryContaining(worldPos, out var territoryInfo)) {
+            message.AppendLine($"Territory Id: {(int)territoryInfo.ZoneId.ZoneId}");
+            message.AppendLine($"Territory Size (blocks): {territoryInfo.BlockCount}");
+        }
+        else {
+           message.AppendLine("You don't seem to be standing in any castle territory.");
+        }
+
+        message.AppendLine($"Character's WorldPosition: {FormatFloat(worldPos.x)} {FormatFloat(worldPos.y)} {FormatFloat(worldPos.z)}");
+        message.AppendLine($"Character's BlockCoordinates: {blockCoords.x} {blockCoords.y}");
+
+        ctx.Reply(message.ToString());
     }
 
     private static float3 WorldPositionOfPlayerCharacter(ChatCommandContext ctx) {
