@@ -1,8 +1,11 @@
+using System.Text;
 using Bloodstone.API;
 using CastleHeartPolice.Prefabs;
+using CastleHeartPolice.Services;
 using CastleHeartPolice.Utils;
 using HarmonyLib;
 using ProjectM;
+using ProjectM.Network;
 using ProjectM.Shared;
 using Unity.Collections;
 using Unity.Entities;
@@ -36,11 +39,18 @@ public static class CastleHeartWillBePlacedHook {
         if (!foundTerritory) {
             return;
         }
-        Plugin.Logger.LogMessage($"Castle Heart about to be placed in territory#{territoryInfo.TerritoryId}");
-        // todo: abort job if placement disallowed
+        var fromCharacter = entityManager.GetComponentData<FromCharacter>(job);
+        var user = entityManager.GetComponentData<User>(fromCharacter.User);
+        var ruleResult = RulesService.Instance.CheckRulePlaceCastleHeartInTerritory(fromCharacter.Character, territoryInfo);
+        if (ruleResult.IsViolation) {
+            var message = new StringBuilder("You cannot claim this territory.\n");
+            foreach (var reason in ruleResult.ViolationReasons) {
+                message.AppendLine($"∙ {reason}");
+            }
+            ServerChatUtils.SendSystemMessageToClient(entityManager, user, message.ToString());
+            AbortJob(job);
+        }
     }
-
-
 
     private static void AbortJob(Entity entity) {
         DestroyUtility.CreateDestroyEvent(VWorld.Server.EntityManager, entity, DestroyReason.Default, DestroyDebugReason.ByScript);
