@@ -1,9 +1,11 @@
 using Bloodstone.API;
 using CastleHeartPolice.Models;
+using Il2CppInterop.Runtime;
 using ProjectM;
 using ProjectM.CastleBuilding;
 using ProjectM.Terrain;
 using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 
 namespace CastleHeartPolice.Utils;
@@ -35,6 +37,11 @@ public static class TerritoryUtil {
             }
             
             // detailed check (all the blocks where a castle floor could be placed. never overlaps with another territory)
+            if (!entityManager.HasComponentRaw(spatialZone.ZoneEntity, AotWorkaroundUtil.TypeIndex<CastleTerritoryBlocks>())) {
+                // territories seem to also be used for things besides castles,
+                // and they don't have blocks
+                continue;
+            }
             var blocks = entityManager.GetBuffer<CastleTerritoryBlocks>(spatialZone.ZoneEntity);
             foreach (var block in blocks) {
                 if (block.BlockCoordinate.Equals(blockCoords)) {
