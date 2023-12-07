@@ -30,7 +30,9 @@ public class RulesService {
     }
 
     public CheckRuleResult CheckRuleJoinClan(Entity character, Entity clan) {
-        var clanHearts = CastleHeartUtil.FindCastleHeartOfClan(clan);
+        var playerHearts = CastleHeartUtil.FindCastleHeartsOfPlayer(character);
+        Plugin.Logger.LogMessage($"Found {playerHearts.Count} player hearts");
+        var clanHearts = CastleHeartUtil.FindCastleHeartsOfClan(clan);
         Plugin.Logger.LogMessage($"Found {clanHearts.Count} clan hearts");
         return new CheckRuleResult()
             .AddViolation("bing")

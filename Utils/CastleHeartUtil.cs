@@ -10,9 +10,28 @@ namespace CastleHeartPolice.Utils;
 
 public static class CastleHeartUtil {
 
-    
+    public static List<Entity> FindCastleHeartsOfPlayer(Entity character) {
+        var entityManager = VWorld.Server.EntityManager;
+        var playerCharacterData = entityManager.GetComponentData<PlayerCharacter>(character); 
+        var playerHearts = new List<Entity>();
 
-    public static List<Entity> FindCastleHeartOfClan(Entity clanTeam) {
+        var query = entityManager.CreateEntityQuery(new EntityQueryDesc() {
+            All = new ComponentType[] {
+                ComponentType.ReadOnly<Pylonstation>(),
+                ComponentType.ReadOnly<CastleHeart>(),
+            },
+        });
+        var heartEntities = query.ToEntityArray(Allocator.Temp);
+        foreach (var heartEntity in heartEntities) {
+            var heartOwner = entityManager.GetComponentData<UserOwner>(heartEntity);
+            if (playerCharacterData.UserEntity.Equals(heartOwner.Owner._Entity)) {
+                playerHearts.Add(heartEntity);
+            }
+        }
+        return playerHearts;
+    }
+
+    public static List<Entity> FindCastleHeartsOfClan(Entity clanTeam) {
         var entityManager = VWorld.Server.EntityManager;
         var clanTeamData = entityManager.GetComponentData<ClanTeam>(clanTeam);
         var clanHearts = new List<Entity>();
