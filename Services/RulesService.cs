@@ -20,14 +20,18 @@ public class RulesService {
     }
 
     public CheckRuleResult CheckRulePlaceCastleHeartInTerritory(Entity character, CastleTerritoryInfo territoryInfo) {
+        /*
         return new CheckRuleResult()
             .AddViolation("bing")
             .AddViolation("bong")
             .AddViolation("bang");
-        //return CheckRuleResult.Allowed();
+        */
+        return CheckRuleResult.Allowed();
     }
 
     public CheckRuleResult CheckRuleJoinClan(Entity character, Entity clan) {
+        var clanHearts = ClanUtil.FindClanCastleHearts(clan);
+        Plugin.Logger.LogMessage($"Found {clanHearts.Count} clan hearts");
         return new CheckRuleResult()
             .AddViolation("bing")
             .AddViolation("bong")
