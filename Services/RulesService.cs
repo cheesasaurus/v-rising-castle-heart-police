@@ -25,7 +25,11 @@ public class RulesService {
     }
 
     public CheckRuleResult CheckRuleJoinClan(Entity character) { // todo: clan param
-        return CheckRuleResult.Allowed();
+        return new CheckRuleResult()
+            .AddViolation("bing")
+            .AddViolation("bong")
+            .AddViolation("bang");
+        //return CheckRuleResult.Allowed();
     }
 
     public CheckRuleResult CheckRuleClaimCastleHeart(Entity character, Entity heart) {
