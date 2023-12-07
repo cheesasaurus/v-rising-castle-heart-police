@@ -1,5 +1,8 @@
 
+using Bloodstone.API;
 using CastleHeartPolice.Models;
+using CastleHeartPolice.Utils;
+using ProjectM;
 using Unity.Entities;
 
 namespace CastleHeartPolice.Services;
@@ -24,7 +27,7 @@ public class RulesService {
         //return CheckRuleResult.Allowed();
     }
 
-    public CheckRuleResult CheckRuleJoinClan(Entity character) { // todo: clan param
+    public CheckRuleResult CheckRuleJoinClan(Entity character, Entity clan) {
         return new CheckRuleResult()
             .AddViolation("bing")
             .AddViolation("bong")

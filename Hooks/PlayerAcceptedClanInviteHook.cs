@@ -31,8 +31,13 @@ public static class PlayerAcceptedClanInviteHook
         }
         var fromCharacter = entityManager.GetComponentData<FromCharacter>(job);
         var user = entityManager.GetComponentData<User>(fromCharacter.User);
-        // todo: identify / search clan
-        var ruleResult = RulesService.Instance.CheckRuleJoinClan(fromCharacter.Character);
+
+        var foundClan = ClanUtil.TryFindClan(inviteResponse.ClanId, out var clan);
+        if (!foundClan) {
+            return;
+        }
+
+        var ruleResult = RulesService.Instance.CheckRuleJoinClan(fromCharacter.Character, clan);
         if (ruleResult.IsViolation) {
             var message = new StringBuilder("You cannot join that clan.\n");
             foreach (var reason in ruleResult.ViolationReasons) {
