@@ -10,7 +10,7 @@ using Unity.Mathematics;
 
 namespace CastleHeartPolice.Utils;
 
-public static class TerritoryUtil {
+public static class CastleTerritoryUtil {
 
     // One unit on the block grid is equivalent to 5 units on the world grid
     private static int BlockSize = 5;
@@ -23,7 +23,7 @@ public static class TerritoryUtil {
         return (intWorldPos / BlockSize) + BlockOffsetFromWorld;
     }
 
-    public static bool TryFindTerritoryContaining(float3 worldPos, out TerritoryInfo territoryInfo) {
+    public static bool TryFindTerritoryContaining(float3 worldPos, out CastleTerritoryInfo territoryInfo) {
         var blockCoords = BlockCoordinatesFromWorldPosition(worldPos);
         float2 worldPos2 = worldPos.xz;
         var entityManager = VWorld.Server.EntityManager;
@@ -45,10 +45,12 @@ public static class TerritoryUtil {
             var blocks = entityManager.GetBuffer<CastleTerritoryBlocks>(spatialZone.ZoneEntity);
             foreach (var block in blocks) {
                 if (block.BlockCoordinate.Equals(blockCoords)) {
-                    territoryInfo = new TerritoryInfo() {
-                        ZoneId = spatialZone.ZoneId,
-                        ZoneEntity = spatialZone.ZoneEntity,
-                        BlockCount = blocks.Length
+                    var castleTerritory = entityManager.GetComponentData<CastleTerritory>(spatialZone.ZoneEntity);
+                    territoryInfo = new CastleTerritoryInfo() {
+                        TerritoryId = castleTerritory.CastleTerritoryIndex,
+                        Entity = spatialZone.ZoneEntity,
+                        CastleTerritory = castleTerritory,
+                        BlockCount = blocks.Length,
                     };
                     return true;
                 }

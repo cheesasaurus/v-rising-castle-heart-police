@@ -15,12 +15,12 @@ public class TerritoryInfoCommand {
     [Command("territory-info", shortHand: "ti", description: "get information about the territory your character is in", adminOnly: false)]
     public void Execute(ChatCommandContext ctx) {
         var worldPos = WorldPositionOfPlayerCharacter(ctx);
-        var blockCoords = TerritoryUtil.BlockCoordinatesFromWorldPosition(worldPos);
+        var blockCoords = CastleTerritoryUtil.BlockCoordinatesFromWorldPosition(worldPos);
 
         var message = new StringBuilder("Territory Information\n");
 
-        if (TerritoryUtil.TryFindTerritoryContaining(worldPos, out var territoryInfo)) {
-            message.AppendLine($"Territory Id: {(int)territoryInfo.ZoneId.ZoneId}");
+        if (CastleTerritoryUtil.TryFindTerritoryContaining(worldPos, out var territoryInfo)) {
+            message.AppendLine($"Castle Territory Id: {territoryInfo.TerritoryId}");
             message.AppendLine($"Territory Size (blocks): {territoryInfo.BlockCount}");
         }
         else {
