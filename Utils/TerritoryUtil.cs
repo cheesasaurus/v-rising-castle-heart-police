@@ -31,17 +31,17 @@ public static class TerritoryUtil {
         var mapZoneCollectionSystem = VWorld.Server.GetExistingSystem<MapZoneCollectionSystem>();
         var mapZoneCollection = mapZoneCollectionSystem.GetMapZoneCollection();
         foreach (var spatialZone in mapZoneCollection._MapZoneLookup.GetValueArray(Allocator.Temp)) {
+            if ((MapZoneFlags.CastleTerritory & spatialZone.ZoneFlags) == 0) {
+                // not a castle territory
+                continue;
+            }
+
             // rough check (bounding rectangle, sometimes nearby territories' rectangles overlap)
             if (!spatialZone.WorldBounds.Contains(worldPos2)) {
                 continue;
             }
             
             // detailed check (all the blocks where a castle floor could be placed. never overlaps with another territory)
-            if (!entityManager.HasComponentRaw(spatialZone.ZoneEntity, AotWorkaroundUtil.TypeIndex<CastleTerritoryBlocks>())) {
-                // territories seem to also be used for things besides castles,
-                // and they don't have blocks
-                continue;
-            }
             var blocks = entityManager.GetBuffer<CastleTerritoryBlocks>(spatialZone.ZoneEntity);
             foreach (var block in blocks) {
                 if (block.BlockCoordinate.Equals(blockCoords)) {
