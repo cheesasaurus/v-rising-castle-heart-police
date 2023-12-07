@@ -29,6 +29,12 @@ To use a limit of one castle heart per clan:
 - CastleHeartScoreStrategy = EveryHeartWorthOnePoint
 
 
+## Commands
+
+`.territory-info` (`.ti` for short) will give you information about the territory your character is currently in.
+Useful for configuring custom scores for each territory.
+
+
 ## Config
 
 Running the server with this mod installed will create a configuration file at `$(VRisingServerPath)/BepInEx/config/CastleHeartPolice.cfg`.
