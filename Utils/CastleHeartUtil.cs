@@ -10,6 +10,7 @@ namespace CastleHeartPolice.Utils;
 
 public static class CastleHeartUtil {
 
+    // Find castle hearts belonging to a single player
     public static List<Entity> FindCastleHeartsOfPlayer(Entity character) {
         var entityManager = VWorld.Server.EntityManager;
         var playerCharacterData = entityManager.GetComponentData<PlayerCharacter>(character); 
@@ -31,9 +32,22 @@ public static class CastleHeartUtil {
         return playerHearts;
     }
 
+    // Find castle hearts belonging to a player or players in their clan
+    // (a clanless player is in their own Team with no other players)
+    public static List<Entity> FindCastleHeartsOfPlayerTeam(Entity character) {
+        var entityManager = VWorld.Server.EntityManager;
+        var playerTeam = entityManager.GetComponentData<Team>(character);
+        return FindCastleHeartsOfTeam(playerTeam.Value);
+    }
+
     public static List<Entity> FindCastleHeartsOfClan(Entity clanTeam) {
         var entityManager = VWorld.Server.EntityManager;
         var clanTeamData = entityManager.GetComponentData<ClanTeam>(clanTeam);
+        return FindCastleHeartsOfTeam(clanTeamData.TeamValue);
+    }
+
+    public static List<Entity> FindCastleHeartsOfTeam(int teamId) {
+        var entityManager = VWorld.Server.EntityManager;
         var clanHearts = new List<Entity>();
 
         var query = entityManager.CreateEntityQuery(new EntityQueryDesc() {
@@ -46,7 +60,7 @@ public static class CastleHeartUtil {
         var heartEntities = query.ToEntityArray(Allocator.Temp);
         foreach (var heartEntity in heartEntities) {
             var heartTeam = entityManager.GetComponentData<Team>(heartEntity);
-            if (clanTeamData.TeamValue.Equals(heartTeam.Value)) {
+            if (teamId.Equals(heartTeam.Value)) {
                 clanHearts.Add(heartEntity);
             }
         }
