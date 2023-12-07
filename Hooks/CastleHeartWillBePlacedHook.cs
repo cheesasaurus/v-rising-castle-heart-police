@@ -6,7 +6,6 @@ using CastleHeartPolice.Utils;
 using HarmonyLib;
 using ProjectM;
 using ProjectM.Network;
-using ProjectM.Shared;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -48,12 +47,8 @@ public static class CastleHeartWillBePlacedHook {
                 message.AppendLine($"∙ {reason}");
             }
             ServerChatUtils.SendSystemMessageToClient(entityManager, user, message.ToString());
-            AbortJob(job);
+            SystemPatchUtil.CancelJob(job);
         }
-    }
-
-    private static void AbortJob(Entity entity) {
-        DestroyUtility.CreateDestroyEvent(VWorld.Server.EntityManager, entity, DestroyReason.Default, DestroyDebugReason.ByScript);
     }
 
 }
