@@ -9,7 +9,7 @@ Definitions
 - let MaxCastleHeartScorePerClan be a number, specified by the configuration of the server
 - let CastleHeartScoreStrategy be a selectable strategy, specified by the configuration of the server
   - e.g. EveryHeartWorthOnePoint (probably the simplest thing to start with)
-  - e.g. EachHeartValuedByTerritory (with the value of each territory configured in a json file)
+  - e.g. CustomTerritoryRatings (with the value of each territory configured in a json file)
 - let the value of any castle heart be determined by the selected CastleHeartScoreStrategy
 
 Rules
@@ -24,6 +24,29 @@ Rules
   - if CastleHeartScore exceeds MaxCastleHeartScorePerClan, the player cannot claim the exposed heart
 
 
+To use a limit of one castle heart per clan:
+- MaxCastleHeartScorePerClan = 1
+- CastleHeartScoreStrategy = EveryHeartWorthOnePoint
+
+
 ## Config
 
-todo
+Running the server with this mod installed will create a configuration file at `$(VRisingServerPath)/BepInEx/config/CastleHeartPolice.cfg`.
+
+```
+## Settings file was created by plugin CastleHeartPolice v1.0.0
+## Plugin GUID: CastleHeartPolice
+
+[General]
+
+## The value of castle hearts owned by a single clan may not exceed this score.
+# Setting type: Int32
+# Default value: 1
+MaxCastleHeartScorePerClan = 1
+
+## Determines the value of each castle heart.
+# Setting type: String
+# Default value: EveryHeartWorthOnePoint
+CastleHeartScoreStrategy = EveryHeartWorthOnePoint
+
+```
