@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 #canvas-container {
     position: relative;
 }
@@ -14,3 +18,31 @@
 .territory-area:hover {
     background-color: magenta;
 }
+
+.flex-container {
+    display: flex;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+#controls-container {
+    border-right: 2px solid black;
+    padding: 5px;
+    min-width: 240px;
+}
+
+#map-scroll-container {
+    overflow: auto;
+}
+
+.output-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#output-json {
+    width: calc(100%);
+    height: 500px;
+}
+

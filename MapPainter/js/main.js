@@ -27,15 +27,28 @@ document.getElementById("showTerritoryIds").addEventListener("change", (event) =
 
 
 const territoryById = {};
+
+const jsonOutputEl = document.getElementById("output-json");
+const updateJsonOutput = () => {
+    const output = {};
+    for (const [territoryId, territory] of Object.entries(territoryById)) {
+        output[territoryId] = territory.Score;
+    }
+    jsonOutputEl.value = JSON.stringify(output, null, "  ");
+};
+
 const editScore = (territoryId) => {
     const territory = territoryById[territoryId];
     const message = "Set value of territory#" + territoryId;
-    const newScore = prompt(message, territory.Score);
-    territory.Score = parseInt(newScore);
+    const newScore = parseInt(prompt(message, territory.Score));
+    territory.Score = Number.isNaN(newScore) ? 69 : newScore;
     mapPainter.paint(config);
+    updateJsonOutput();
 }
 
 const canvasContainer = document.getElementById('canvas-container');
+canvasContainer.style.width = canvas.width + "px";
+canvasContainer.style.height = canvas.height + "px";
 const scaleDown = alignment.scaleDown;
 for (const territory of territoryData.Territories) {
     const territoryId = territory.CastleTerritoryId;
@@ -62,3 +75,5 @@ for (const territory of territoryData.Territories) {
     area.onclick = () => editScore(territoryId);
     canvasContainer.appendChild(area);
 }
+
+updateJsonOutput();
