@@ -1,5 +1,6 @@
 
 using Bloodstone.API;
+using CastleHeartPolice.CastleHeartScore;
 using CastleHeartPolice.Models;
 using CastleHeartPolice.Utils;
 using ProjectM;
@@ -12,16 +13,29 @@ public class RulesService {
     public static RulesService Instance {get; private set; }
 
     public static void InitInstance() {
-        Instance = new RulesService();
+        var strategyFactory = new CastleHeartScoreStrategyFactory();
+        var maxCastleHeartScorePerClan = CastleHeartPoliceConfig.MaxCastleHeartScorePerClan.Value;
+        var scoreStrategy = strategyFactory.Strategy(CastleHeartPoliceConfig.CastleHeartScoreStrategy.Value);
+        Instance = new RulesService(maxCastleHeartScorePerClan, scoreStrategy);
     }
 
-    public RulesService() {
-        // todo: feed in CastleHeartScoreStrategy
+    private int MaxCastleHeartScorePerClan;
+    private ICastleHeartScoreStrategy CastleHeartScoreStrategy;
+
+    public RulesService(int maxCastleHeartScorePerClan, ICastleHeartScoreStrategy castleHeartScoreStrategy) {
+        MaxCastleHeartScorePerClan = maxCastleHeartScorePerClan;
+        CastleHeartScoreStrategy = castleHeartScoreStrategy;
     }
 
     public CheckRuleResult CheckRulePlaceCastleHeartInTerritory(Entity character, CastleTerritoryInfo territoryInfo) {
         var teamHearts = CastleHeartUtil.FindCastleHeartsOfPlayerTeam(character);
-        Plugin.Logger.LogMessage($"Found {teamHearts.Count} team hearts");
+        var score = 0;
+        foreach (var heart in teamHearts) {
+            score += CastleHeartScoreStrategy.HeartScore(heart);
+        }
+        Plugin.Logger.LogMessage($"Found {teamHearts.Count} team hearts worth a total of {score} points");
+        // todo: score territory too
+        
         /*
         return new CheckRuleResult()
             .AddViolation("bing")
