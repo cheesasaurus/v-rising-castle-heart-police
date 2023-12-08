@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using Bloodstone.API;
+using CastleHeartPolice.Services;
 using CastleHeartPolice.Utils;
 using ProjectM.Terrain;
 using Unity.Mathematics;
@@ -14,6 +15,7 @@ public class TerritoryInfoCommand {
 
     [Command("territory-info", shortHand: "ti", description: "get information about the territory your character is in", adminOnly: false)]
     public void Execute(ChatCommandContext ctx) {
+        var rulesService = RulesService.Instance;
         var worldPos = WorldPositionOfPlayerCharacter(ctx);
         var blockCoords = CastleTerritoryUtil.BlockCoordinatesFromWorldPosition(worldPos);
 
@@ -21,6 +23,7 @@ public class TerritoryInfoCommand {
 
         if (CastleTerritoryUtil.TryFindTerritoryContaining(worldPos, out var territoryInfo)) {
             message.AppendLine($"Castle Territory Id: {territoryInfo.TerritoryId}");
+            message.AppendLine($"Territory value: {rulesService.LabeledScore(rulesService.TerritoryScore(territoryInfo))}");
             message.AppendLine($"Territory Size (blocks): {territoryInfo.BlockCount}");
         }
         else {

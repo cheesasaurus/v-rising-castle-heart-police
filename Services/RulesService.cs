@@ -27,14 +27,22 @@ public class RulesService {
         CastleHeartScoreStrategy = castleHeartScoreStrategy;
     }
 
+    public int HeartScore(Entity castleHeart) {
+        return CastleHeartScoreStrategy.HeartScore(castleHeart);
+    }
+
+    public int TerritoryScore(CastleTerritoryInfo territoryInfo) {
+        return CastleHeartScoreStrategy.TerritoryScore(territoryInfo);
+    }
+
     public CheckRuleResult CheckRulePlaceCastleHeartInTerritory(Entity character, CastleTerritoryInfo territoryInfo) {
         var currentScore = 0;
         var teamHearts = CastleHeartUtil.FindCastleHeartsOfPlayerTeam(character);
         foreach (var heart in teamHearts) {
-            currentScore += CastleHeartScoreStrategy.HeartScore(heart);
+            currentScore += HeartScore(heart);
         }
 
-        var territoryScore = CastleHeartScoreStrategy.TerritoryScore(territoryInfo);
+        var territoryScore = TerritoryScore(territoryInfo);
         
         var result = CheckRuleResult.Allowed();
         if ((currentScore + territoryScore) > MaxCastleHeartScorePerClan) {
@@ -52,13 +60,13 @@ public class RulesService {
         var playerScore = 0;
         var playerHearts = CastleHeartUtil.FindCastleHeartsOfPlayer(character);
         foreach (var heart in playerHearts) {
-            playerScore += CastleHeartScoreStrategy.HeartScore(heart);
+            playerScore += HeartScore(heart);
         }
 
         var clanScore = 0;
         var clanHearts = CastleHeartUtil.FindCastleHeartsOfClan(clan);
         foreach (var heart in clanHearts) {
-            clanScore += CastleHeartScoreStrategy.HeartScore(heart);
+            clanScore += HeartScore(heart);
         }
 
         var result = CheckRuleResult.Allowed();
@@ -80,10 +88,10 @@ public class RulesService {
             if (claimedHeart.Equals(teamHeart)) {
                 return CheckRuleResult.Allowed();
             }
-            currentScore += CastleHeartScoreStrategy.HeartScore(teamHeart);
+            currentScore += HeartScore(teamHeart);
         }
 
-        var claimedHeartScore = CastleHeartScoreStrategy.HeartScore(claimedHeart);
+        var claimedHeartScore = HeartScore(claimedHeart);
 
         var result = CheckRuleResult.Allowed();
         if ((currentScore + claimedHeartScore) > MaxCastleHeartScorePerClan) {
