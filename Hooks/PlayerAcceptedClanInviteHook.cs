@@ -39,9 +39,9 @@ public static class PlayerAcceptedClanInviteHook
 
         var ruleResult = RulesService.Instance.CheckRuleJoinClan(fromCharacter.Character, clan);
         if (ruleResult.IsViolation) {
-            var message = new StringBuilder("You cannot join that clan.\n");
+            var message = new StringBuilder("CLAN JOINING DENIED!\n");
             foreach (var reason in ruleResult.ViolationReasons) {
-                message.AppendLine($"∙ {reason}");
+                message.AppendLine($"{reason}");
             }
             ServerChatUtils.SendSystemMessageToClient(entityManager, user, message.ToString());
             SystemPatchUtil.CancelJob(job);

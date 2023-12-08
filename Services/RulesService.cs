@@ -42,30 +42,42 @@ public class RulesService {
             message.AppendLine($"Claiming this territory would put you and your clan over the allowed limit of {LabeledScore(MaxCastleHeartScorePerClan)}.");
             message.AppendLine($"Currently at:\t\t{LabeledScore(currentScore)}");
             message.AppendLine($"Territory value:\t{LabeledScore(territoryScore)}");
+            message.AppendLine($"Total:\t\t\t{LabeledScore(currentScore + territoryScore)}");
             result.AddViolation(message.ToString());
         }
         return result;
     }
 
     public CheckRuleResult CheckRuleJoinClan(Entity character, Entity clan) {
+        var playerScore = 0;
         var playerHearts = CastleHeartUtil.FindCastleHeartsOfPlayer(character);
-        Plugin.Logger.LogMessage($"Found {playerHearts.Count} player hearts");
+        foreach (var heart in playerHearts) {
+            playerScore += CastleHeartScoreStrategy.HeartScore(heart);
+        }
+
+        var clanScore = 0;
         var clanHearts = CastleHeartUtil.FindCastleHeartsOfClan(clan);
-        Plugin.Logger.LogMessage($"Found {clanHearts.Count} clan hearts");
-        /*
-        return new CheckRuleResult()
-            .AddViolation("bing")
-            .AddViolation("bong")
-            .AddViolation("bang");
-        */
-        return CheckRuleResult.Allowed();
+        foreach (var heart in clanHearts) {
+            clanScore += CastleHeartScoreStrategy.HeartScore(heart);
+        }
+
+        var result = CheckRuleResult.Allowed();
+        if ((playerScore + clanScore) > MaxCastleHeartScorePerClan) {
+            var message = new StringBuilder();
+            message.AppendLine($"Joining that clan would put you and your clan over the allowed limit of {LabeledScore(MaxCastleHeartScorePerClan)}.");
+            message.AppendLine($"You:\t\t{LabeledScore(playerScore)}");
+            message.AppendLine($"Them:\t{LabeledScore(clanScore)}");
+            message.AppendLine($"Total:\t\t{LabeledScore(playerScore + clanScore)}");
+            result.AddViolation(message.ToString());
+        }
+        return result;
     }
 
     public CheckRuleResult CheckRuleClaimCastleHeart(Entity character, Entity heart) {
         return CheckRuleResult.Allowed();
     }
 
-    private string LabeledScore(int score) {
+    public string LabeledScore(int score) {
         if (score == 1) {
             return $"{score} Point";
         }
