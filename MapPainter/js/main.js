@@ -11,3 +11,13 @@ const mapPainter = new MapPainter(document.getElementById("canvas"), backgroundI
 const config = new MapPainterConfig();
 
 mapPainter.paint(config);
+
+document.getElementById("showBoundingRectangles").addEventListener("change", (event) => {
+    config.showBoundingRectangles = !!event.currentTarget.checked;
+    mapPainter.paint(config);
+});
+
+document.getElementById("showTerritoryIds").addEventListener("change", (event) => {
+    config.showTerritoryIds = !!event.currentTarget.checked;
+    mapPainter.paint(config);
+});

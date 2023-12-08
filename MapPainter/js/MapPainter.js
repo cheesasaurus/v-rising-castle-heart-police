@@ -34,7 +34,7 @@ export default class MapPainter {
             const y = ctx.canvas.height - (max.y / scaleDown) + offsetY;
 
             // bounding rectangle
-            if (config.showBoundingRectangle) {
+            if (config.showBoundingRectangles) {
                 ctx.strokeStyle = "magenta";
                 ctx.lineWidth = 1;
                 ctx.beginPath();
@@ -47,7 +47,10 @@ export default class MapPainter {
 
             // score
             const scoreText = territory.Score;
-            const scoreY = centerY - 5;
+            let scoreY = centerY;
+            if (config.showTerritoryIds) {
+                scoreY -= 5;
+            }
             ctx.font = "bold 26px Roboto";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -58,7 +61,7 @@ export default class MapPainter {
             ctx.fillText(scoreText, centerX, scoreY);
 
             // territory id
-            if (config.showTerritoryId) {
+            if (config.showTerritoryIds) {
                 const idText = '#' + territory.CastleTerritoryId;
                 const idY = centerY + 15;
                 ctx.font = "12px Arial";
