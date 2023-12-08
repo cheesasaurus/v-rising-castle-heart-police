@@ -1,7 +1,7 @@
 import MapPainter from './MapPainter.js';
 import MapPainterConfig from './MapPainterConfig.js';
 import Alignment from './Alignment.js';
-import { downloadFile } from './File.js';
+import { downloadFile, promptLoadLocalFile } from './File.js';
 
 const backgroundImage = new Image();
 await new Promise(resolve => backgroundImage.onload = resolve, backgroundImage.src = "./images/map-background.png");
@@ -97,26 +97,12 @@ document.getElementById("download-map").addEventListener('click', async function
 });
 
 document.getElementById("import-json").addEventListener('click', async function() {
-    const input = document.createElement('input');
-    input.type = 'file';
-
-    input.onchange = e => { 
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.readAsText(file, 'UTF-8');
-
-        reader.onload = readerEvent => {
-            const scoresById = JSON.parse(readerEvent.target.result);
-            for (const [territoryId, score] of Object.entries(scoresById)) {
-                territoryById[territoryId].Score = score;
-            }
-            mapPainter.paint(config);
-            updateJsonOutput();
-        }
-
+    const scoresById = JSON.parse(await promptLoadLocalFile('.json'));
+    for (const [territoryId, score] of Object.entries(scoresById)) {
+        territoryById[territoryId].Score = score;
     }
-
-    input.click();
+    mapPainter.paint(config);
+    updateJsonOutput();    
 });
 
 updateJsonOutput();

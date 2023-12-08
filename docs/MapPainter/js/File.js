@@ -9,3 +9,21 @@ export const downloadFile = file => {
     window.URL.revokeObjectURL(url)
 };
 
+
+export const promptLoadLocalFile = async function(type = 'text/plain') {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = type;
+
+    return new Promise(resolve => {
+        input.onchange = e => { 
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+            reader.onload = readerEvent => {
+                resolve(readerEvent.target.result);
+            }
+        }
+        input.click();
+    });
+}
