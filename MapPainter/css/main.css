@@ -36,8 +36,15 @@ body {
     overflow: auto;
 }
 
+.download-map-container {
+    text-align: center;
+}
+
+#download-map {
+    margin-top: 20px}
+
 .output-section {
-    margin-top: 20px;
+    margin-top: 50px;
     text-align: center;
 }
 

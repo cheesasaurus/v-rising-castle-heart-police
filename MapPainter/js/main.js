@@ -43,7 +43,7 @@ const editScore = (territoryId) => {
     const territory = territoryById[territoryId];
     const message = "Set value of territory#" + territoryId;
     const newScore = parseInt(prompt(message, territory.Score));
-    territory.Score = Number.isNaN(newScore) ? 69 : newScore;
+    territory.Score = Number.isNaN(newScore) ? oldValue : newScore;
     mapPainter.paint(config);
     updateJsonOutput();
 }
@@ -87,11 +87,23 @@ document.getElementById("download-json").addEventListener('click', () => {
 
     link.href = url;
     link.download = file.name;
-    //document.body.appendChild(link);
     link.click();
-
-    //document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
+});
+
+document.getElementById("download-map").addEventListener('click', async function() {
+    const imageBlob = await new Promise(resolve => canvas.toBlob(resolve));
+
+    const file = new File([imageBlob], 'territory-map.png', {
+        type: 'image/png',
+    });
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(file);
+
+    link.href = url;
+    link.download = file.name;
+    link.click();
+    window.URL.revokeObjectURL(url);
 });
 
 updateJsonOutput();
