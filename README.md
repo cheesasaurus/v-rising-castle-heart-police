@@ -14,7 +14,7 @@ Definitions
 
 Rules
 - castle heart placement:
-  - let CastleHeartScore be the value of hearts owned by the player and all other players in their current clan
+  - let CastleHeartScore be the value of the territory, hearts owned by the player and all other players in their current clan
   - if CastleHeartScore exceeds MaxCastleHeartScorePerClan, the player cannot place the heart
 - joining a clan:
   - let CastleHeartScore be the value of hearts owned by the player and all players in the clan they would join
