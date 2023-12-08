@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Bloodstone.API;
 using ProjectM;
@@ -65,6 +66,25 @@ public static class CastleHeartUtil {
             }
         }
         return clanHearts;
+    }
+
+    public static Entity FindCastleHeartById(NetworkId heartId) {
+        var entityManager = VWorld.Server.EntityManager;
+        var query = entityManager.CreateEntityQuery(new EntityQueryDesc() {
+            All = new ComponentType[] {
+                ComponentType.ReadOnly<Pylonstation>(),
+                ComponentType.ReadOnly<CastleHeart>(),
+                ComponentType.ReadOnly<NetworkId>(),
+            },
+        });
+        var heartEntities = query.ToEntityArray(Allocator.Temp);
+        foreach (var heartEntity in heartEntities) {
+            var networkId = entityManager.GetComponentData<NetworkId>(heartEntity);
+            if (heartId.Equals(networkId)) {
+                return heartEntity;
+            }
+        }
+        throw new Exception();
     }
 
 }
