@@ -20,7 +20,6 @@ public static class CastleHeartWillBeClaimedHook {
     public static void Prefix(PylonstationSystem __instance) {
         var jobs = __instance._ClaimPylonQuery.ToEntityArray(Allocator.Temp);
         foreach (var job in jobs) {
-            Plugin.Logger.LogMessage("something happened with claim pylon job");
             HandleCastleHeartWillBeClaimed(job);
         }
     }
@@ -29,6 +28,9 @@ public static class CastleHeartWillBeClaimedHook {
         var entityManager = VWorld.Server.EntityManager;
 
         var claimPylonEvent = entityManager.GetComponentData<ClaimPylonEvent>(job);
+        if (claimPylonEvent.IsConsoleCommand) {
+            return;
+        }
         var castleHeart = CastleHeartUtil.FindCastleHeartById(claimPylonEvent.Workstation);
         
         var fromCharacter = entityManager.GetComponentData<FromCharacter>(job);
