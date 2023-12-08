@@ -37,7 +37,7 @@ demonstration: https://www.youtube.com/watch?v=pmk5RHCz2_c
 Useful for configuring custom scores for each territory.
 
 
-## Config
+## Basic Config
 
 Running the server with this mod installed will create a configuration file at `$(VRisingServerPath)/BepInEx/config/CastleHeartPolice.cfg`.
 
@@ -58,3 +58,10 @@ MaxCastleHeartScorePerClan = 1
 CastleHeartScoreStrategy = EveryHeartWorthOnePoint
 
 ```
+
+## Configuring custom scores for territories
+
+There's a tool to help you do this:
+https://cheesasaurus.github.io/v-rising-castle-heart-police/MapPainter/index.html
+
+TODO: actually implement using these custom scores
