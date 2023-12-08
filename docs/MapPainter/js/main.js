@@ -1,6 +1,7 @@
 import MapPainter from './MapPainter.js';
 import MapPainterConfig from './MapPainterConfig.js';
 import Alignment from './Alignment.js';
+import { downloadFile } from './File.js';
 
 const backgroundImage = new Image();
 await new Promise(resolve => backgroundImage.onload = resolve, backgroundImage.src = "./images/map-background.png");
@@ -84,28 +85,15 @@ document.getElementById("download-json").addEventListener('click', () => {
     const file = new File([jsonOutput], 'territoryScores.json', {
         type: 'text/plain',
     });
-    const link = document.createElement('a')
-    const url = URL.createObjectURL(file);
-
-    link.href = url;
-    link.download = file.name;
-    link.click();
-    window.URL.revokeObjectURL(url)
+    downloadFile(file);
 });
 
 document.getElementById("download-map").addEventListener('click', async function() {
     const imageBlob = await new Promise(resolve => canvas.toBlob(resolve));
-
     const file = new File([imageBlob], 'territory-map.png', {
         type: 'image/png',
     });
-    const link = document.createElement('a')
-    const url = URL.createObjectURL(file);
-
-    link.href = url;
-    link.download = file.name;
-    link.click();
-    window.URL.revokeObjectURL(url);
+    downloadFile(file);
 });
 
 document.getElementById("import-json").addEventListener('click', async function() {
