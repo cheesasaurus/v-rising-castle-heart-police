@@ -26,4 +26,21 @@ export const promptLoadLocalFile = async function(type = 'text/plain') {
         }
         input.click();
     });
-}
+};
+
+
+export const fetchImage = async function(url) {
+    const image = new Image();
+    await new Promise(resolve => {
+        image.onload = resolve;
+        image.src = url;
+    });
+    return image;
+};
+
+
+export const fetchJson = async function(url) {
+    const response = await fetch(url);
+    return response.json();
+};
+

@@ -1,13 +1,10 @@
 import MapPainter from './MapPainter.js';
 import MapPainterConfig from './MapPainterConfig.js';
 import Alignment from './Alignment.js';
-import { downloadFile, promptLoadLocalFile } from './File.js';
+import { downloadFile, fetchImage, fetchJson, promptLoadLocalFile } from './File.js';
 
-const backgroundImage = new Image();
-await new Promise(resolve => backgroundImage.onload = resolve, backgroundImage.src = "./images/map-background.png");
-
-const response = await fetch('./data/territories.json');
-const territoryData = await response.json();
+const backgroundImage = await fetchImage('./images/map-background.png');
+const territoryData = await fetchJson('./data/territories.json');
 
 const alignment = new Alignment();
 const canvas = document.getElementById("canvas");
