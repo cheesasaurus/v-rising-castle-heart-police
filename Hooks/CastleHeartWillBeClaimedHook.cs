@@ -35,7 +35,7 @@ public static class CastleHeartWillBeClaimedHook {
         var user = entityManager.GetComponentData<User>(fromCharacter.User);
         var ruleResult = RulesService.Instance.CheckRuleClaimCastleHeart(fromCharacter.Character, castleHeart);
         if (ruleResult.IsViolation) {
-            var message = new StringBuilder("CASTLE HEART CLAIM DENIED!\n");
+            var message = new StringBuilder("CASTLE CLAIM DENIED!\n");
             foreach (var reason in ruleResult.ViolationReasons) {
                 message.AppendLine($"{reason}");
             }

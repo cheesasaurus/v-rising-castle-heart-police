@@ -73,8 +73,28 @@ public class RulesService {
         return result;
     }
 
-    public CheckRuleResult CheckRuleClaimCastleHeart(Entity character, Entity heart) {
-        return CheckRuleResult.Allowed();
+    public CheckRuleResult CheckRuleClaimCastleHeart(Entity character, Entity claimedHeart) {
+        var currentScore = 0;
+        var teamHearts = CastleHeartUtil.FindCastleHeartsOfPlayerTeam(character);
+        foreach (var teamHeart in teamHearts) {
+            if (claimedHeart.Equals(teamHeart)) {
+                return CheckRuleResult.Allowed();
+            }
+            currentScore += CastleHeartScoreStrategy.HeartScore(teamHeart);
+        }
+
+        var claimedHeartScore = CastleHeartScoreStrategy.HeartScore(claimedHeart);
+
+        var result = CheckRuleResult.Allowed();
+        if ((currentScore + claimedHeartScore) > MaxCastleHeartScorePerClan) {
+            var message = new StringBuilder();
+            message.AppendLine($"Claiming this territory would put you and your clan over the allowed limit of {LabeledScore(MaxCastleHeartScorePerClan)}.");
+            message.AppendLine($"Currently at:\t\t{LabeledScore(currentScore)}");
+            message.AppendLine($"Territory value:\t{LabeledScore(claimedHeartScore)}");
+            message.AppendLine($"Total:\t\t\t{LabeledScore(currentScore + claimedHeartScore)}");
+            result.AddViolation(message.ToString());
+        }
+        return result;
     }
 
     public string LabeledScore(int score) {
