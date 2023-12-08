@@ -42,7 +42,13 @@ body {
 }
 
 #output-json {
-    width: calc(100%);
-    height: 500px;
+    width: calc(90%);
+    height: 300px;
 }
+
+#download-json {
+    margin: 5px;
+}
+
+
 

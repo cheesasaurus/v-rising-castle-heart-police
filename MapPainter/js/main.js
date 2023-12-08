@@ -29,12 +29,14 @@ document.getElementById("showTerritoryIds").addEventListener("change", (event) =
 const territoryById = {};
 
 const jsonOutputEl = document.getElementById("output-json");
+let jsonOutput = "";
 const updateJsonOutput = () => {
     const output = {};
     for (const [territoryId, territory] of Object.entries(territoryById)) {
         output[territoryId] = territory.Score;
     }
-    jsonOutputEl.value = JSON.stringify(output, null, "  ");
+    jsonOutput = JSON.stringify(output, null, "  ");
+    jsonOutputEl.value = jsonOutput;
 };
 
 const editScore = (territoryId) => {
@@ -75,5 +77,21 @@ for (const territory of territoryData.Territories) {
     area.onclick = () => editScore(territoryId);
     canvasContainer.appendChild(area);
 }
+
+document.getElementById("download-json").addEventListener('click', () => {
+    const file = new File([jsonOutput], 'territoryScores.json', {
+        type: 'text/plain',
+    });
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(file);
+
+    link.href = url;
+    link.download = file.name;
+    //document.body.appendChild(link);
+    link.click();
+
+    //document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+});
 
 updateJsonOutput();
