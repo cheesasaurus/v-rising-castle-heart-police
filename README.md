@@ -28,6 +28,8 @@ To use a limit of one castle heart per clan:
 - MaxCastleHeartScorePerClan = 1
 - CastleHeartScoreStrategy = EveryHeartWorthOnePoint
 
+demonstration: https://www.youtube.com/watch?v=pmk5RHCz2_c
+
 
 ## Commands
 
