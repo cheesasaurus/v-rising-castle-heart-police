@@ -1,0 +1,16 @@
+#canvas-container {
+    position: relative;
+}
+
+#canvas-container canvas {
+    position: absolute;
+}
+
+.territory-area {
+    position: absolute;
+    display: block;
+    opacity: 0.3;
+}
+.territory-area:hover {
+    background-color: magenta;
+}

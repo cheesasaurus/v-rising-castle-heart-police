@@ -1,20 +1,22 @@
 export default class MapPainter {
     canvas;
     backgroundImage;
+    alignment;
 
-    constructor(canvas, backgroundImage, territoryData) {
+    constructor(canvas, backgroundImage, territoryData, alignment) {
         this.canvas = canvas;
         this.backgroundImage = backgroundImage;
         this.territoryData = territoryData;
+        this.alignment = alignment;
     }
 
     async paint(config) {
         const canvas = this.canvas;
         const data = this.territoryData;
 
-        const scaleDown = 2.13;
-        const offsetX = -452;
-        const offsetY = 166;
+        const scaleDown = this.alignment.scaleDown;
+        const offsetX = this.alignment.offsetX;
+        const offsetY = this.alignment.offsetY;
 
         const ctx = canvas.getContext("2d");
         ctx.canvas.width = (data.Max.x / scaleDown) - offsetX;
