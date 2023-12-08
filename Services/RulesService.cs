@@ -1,9 +1,9 @@
 
+using System.Text;
 using Bloodstone.API;
 using CastleHeartPolice.CastleHeartScore;
 using CastleHeartPolice.Models;
 using CastleHeartPolice.Utils;
-using ProjectM;
 using Unity.Entities;
 
 namespace CastleHeartPolice.Services;
@@ -28,21 +28,23 @@ public class RulesService {
     }
 
     public CheckRuleResult CheckRulePlaceCastleHeartInTerritory(Entity character, CastleTerritoryInfo territoryInfo) {
+        var currentScore = 0;
         var teamHearts = CastleHeartUtil.FindCastleHeartsOfPlayerTeam(character);
-        var score = 0;
         foreach (var heart in teamHearts) {
-            score += CastleHeartScoreStrategy.HeartScore(heart);
+            currentScore += CastleHeartScoreStrategy.HeartScore(heart);
         }
-        Plugin.Logger.LogMessage($"Found {teamHearts.Count} team hearts worth a total of {score} points");
-        // todo: score territory too
+
+        var territoryScore = CastleHeartScoreStrategy.TerritoryScore(territoryInfo);
         
-        /*
-        return new CheckRuleResult()
-            .AddViolation("bing")
-            .AddViolation("bong")
-            .AddViolation("bang");
-        */
-        return CheckRuleResult.Allowed();
+        var result = CheckRuleResult.Allowed();
+        if ((currentScore + territoryScore) > MaxCastleHeartScorePerClan) {
+            var message = new StringBuilder();
+            message.AppendLine($"Claiming this territory would put you and your clan over the allowed limit of {LabeledScore(MaxCastleHeartScorePerClan)}.");
+            message.AppendLine($"Currently at:\t\t{LabeledScore(currentScore)}");
+            message.AppendLine($"Territory value:\t{LabeledScore(territoryScore)}");
+            result.AddViolation(message.ToString());
+        }
+        return result;
     }
 
     public CheckRuleResult CheckRuleJoinClan(Entity character, Entity clan) {
@@ -61,6 +63,13 @@ public class RulesService {
 
     public CheckRuleResult CheckRuleClaimCastleHeart(Entity character, Entity heart) {
         return CheckRuleResult.Allowed();
+    }
+
+    private string LabeledScore(int score) {
+        if (score == 1) {
+            return $"{score} Point";
+        }
+        return $"{score} Points";
     }
 
 }

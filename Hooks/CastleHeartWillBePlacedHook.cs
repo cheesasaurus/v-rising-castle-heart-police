@@ -42,9 +42,9 @@ public static class CastleHeartWillBePlacedHook {
         var user = entityManager.GetComponentData<User>(fromCharacter.User);
         var ruleResult = RulesService.Instance.CheckRulePlaceCastleHeartInTerritory(fromCharacter.Character, territoryInfo);
         if (ruleResult.IsViolation) {
-            var message = new StringBuilder("You cannot claim this territory.\n");
+            var message = new StringBuilder("CASTLE HEART PLACEMENT DENIED!\n");
             foreach (var reason in ruleResult.ViolationReasons) {
-                message.AppendLine($"∙ {reason}");
+                message.AppendLine($"{reason}");
             }
             ServerChatUtils.SendSystemMessageToClient(entityManager, user, message.ToString());
             SystemPatchUtil.CancelJob(job);
