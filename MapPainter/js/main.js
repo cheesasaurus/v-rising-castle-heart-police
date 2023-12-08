@@ -43,7 +43,9 @@ const editScore = (territoryId) => {
     const territory = territoryById[territoryId];
     const message = "Set value of territory#" + territoryId;
     const newScore = parseInt(prompt(message, territory.Score));
-    territory.Score = Number.isNaN(newScore) ? oldValue : newScore;
+    if (!Number.isNaN(newScore)) {
+        territory.Score = newScore;
+    }
     mapPainter.paint(config);
     updateJsonOutput();
 }
@@ -104,6 +106,29 @@ document.getElementById("download-map").addEventListener('click', async function
     link.download = file.name;
     link.click();
     window.URL.revokeObjectURL(url);
+});
+
+document.getElementById("import-json").addEventListener('click', async function() {
+    const input = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = e => { 
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsText(file, 'UTF-8');
+
+        reader.onload = readerEvent => {
+            const scoresById = JSON.parse(readerEvent.target.result);
+            for (const [territoryId, score] of Object.entries(scoresById)) {
+                territoryById[territoryId].Score = score;
+            }
+            mapPainter.paint(config);
+            updateJsonOutput();
+        }
+
+    }
+
+    input.click();
 });
 
 updateJsonOutput();
