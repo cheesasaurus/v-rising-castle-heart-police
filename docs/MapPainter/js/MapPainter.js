@@ -19,9 +19,6 @@ export default class MapPainter {
         const offsetY = this.alignment.offsetY;
 
         const ctx = canvas.getContext("2d");
-        ctx.canvas.width = (data.Max.x / scaleDown) - offsetX;
-        ctx.canvas.height = (data.Max.y / scaleDown);
-
         ctx.drawImage(this.backgroundImage, 0, 0);
 
         for (const territory of data.Territories) {

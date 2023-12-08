@@ -8,21 +8,21 @@ const territoryData = await fetchJson('./data/territories.json');
 
 const alignment = new Alignment();
 const canvas = document.getElementById("canvas");
-const mapPainter = new MapPainter(canvas, backgroundImage, territoryData, alignment);
-const config = new MapPainterConfig();
+canvas.width = (territoryData.Max.x / alignment.scaleDown) - alignment.offsetX;
+canvas.height = (territoryData.Max.y / alignment.scaleDown);
 
-mapPainter.paint(config);
+const mapPainter = new MapPainter(canvas, backgroundImage, territoryData, alignment);
+const painterConfig = new MapPainterConfig();
 
 document.getElementById("showBoundingRectangles").addEventListener("change", (event) => {
-    config.showBoundingRectangles = !!event.currentTarget.checked;
-    mapPainter.paint(config);
+    painterConfig.showBoundingRectangles = !!event.currentTarget.checked;
+    mapPainter.paint(painterConfig);
 });
 
 document.getElementById("showTerritoryIds").addEventListener("change", (event) => {
-    config.showTerritoryIds = !!event.currentTarget.checked;
-    mapPainter.paint(config);
+    painterConfig.showTerritoryIds = !!event.currentTarget.checked;
+    mapPainter.paint(painterConfig);
 });
-
 
 const territoryById = {};
 
@@ -44,7 +44,7 @@ const editScore = (territoryId) => {
     if (!Number.isNaN(newScore)) {
         territory.Score = newScore;
     }
-    mapPainter.paint(config);
+    mapPainter.paint(painterConfig);
     updateJsonOutput();
 }
 
@@ -98,8 +98,9 @@ document.getElementById("import-json").addEventListener('click', async function(
     for (const [territoryId, score] of Object.entries(scoresById)) {
         territoryById[territoryId].Score = score;
     }
-    mapPainter.paint(config);
+    mapPainter.paint(painterConfig);
     updateJsonOutput();    
 });
 
 updateJsonOutput();
+mapPainter.paint(painterConfig);
