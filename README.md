@@ -64,4 +64,7 @@ CastleHeartScoreStrategy = EveryHeartWorthOnePoint
 There's a tool to help you do this:
 https://cheesasaurus.github.io/v-rising-castle-heart-police/MapPainter/index.html
 
+demo:
+https://www.youtube.com/watch?v=QddkJ2aoed8
+
 TODO: actually implement using these custom scores
