@@ -24,7 +24,7 @@ public class TerritoryScoresConfig : AbstractJsonConfig {
         var options = new JsonSerializerOptions {
             WriteIndented = true,
         };
-        return JsonSerializer.Serialize(ScoreByTerritoryId);
+        return JsonSerializer.Serialize(ScoreByTerritoryId, options);
     }
 
     protected override void InitDefaults() {
