@@ -10,7 +10,7 @@ This is a server-side mod.
 Definitions
 - let MaxCastleHeartScorePerClan be a number, specified by the configuration of the server
 - let CastleHeartScoreStrategy be a selectable strategy, specified by the configuration of the server
-  - e.g. EveryHeartWorthOnePoint (probably the simplest thing to start with)
+  - e.g. EveryHeartWorthOnePoint
   - e.g. CustomTerritoryRatings (with the value of each territory configured in a json file)
 - let the value of any castle heart be determined by the selected CastleHeartScoreStrategy
 
@@ -63,10 +63,8 @@ CastleHeartScoreStrategy = EveryHeartWorthOnePoint
 
 ## Configuring custom scores for territories
 
-There's a tool to help you do this:
-https://cheesasaurus.github.io/v-rising-castle-heart-police/MapPainter/index.html
+You can edit `$(VRisingServerPath)/BepInEx/config/CastleHeartPolice/territoryScores.json` manually.
 
-demo:
-https://www.youtube.com/watch?v=QddkJ2aoed8
-
-TODO: actually implement using these custom scores
+But I highly recommend using [this tool](https://cheesasaurus.github.io/v-rising-castle-heart-police/MapPainter/index.html) to generate the json file for you to copy/paste.
+- It can also generate a map for you to share with the players on your server.
+- demo: https://www.youtube.com/watch?v=QddkJ2aoed8
