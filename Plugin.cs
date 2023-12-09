@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
+using CastleHeartPolice.Config;
 using CastleHeartPolice.Services;
 using HarmonyLib;
 using VampireCommandFramework;
@@ -21,6 +22,7 @@ public class Plugin : BasePlugin
         // Plugin startup logic
         Logger = Log;
         CastleHeartPoliceConfig.Init(Config);
+        var territoryScoresConfig = TerritoryScoresConfig.Init("territoryScores.json");
         RulesService.InitInstance();
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} version {MyPluginInfo.PLUGIN_VERSION} is loaded!");
 

@@ -1,7 +1,7 @@
 using BepInEx.Configuration;
 using CastleHeartPolice.CastleHeartScore;
 
-namespace CastleHeartPolice;
+namespace CastleHeartPolice.Config;
 
 public static class CastleHeartPoliceConfig {
     public static ConfigEntry<int> MaxCastleHeartScorePerClan { get; private set; }

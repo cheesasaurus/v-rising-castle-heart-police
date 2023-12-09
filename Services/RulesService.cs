@@ -2,6 +2,7 @@
 using System.Text;
 using Bloodstone.API;
 using CastleHeartPolice.CastleHeartScore;
+using CastleHeartPolice.Config;
 using CastleHeartPolice.Models;
 using CastleHeartPolice.Utils;
 using Unity.Entities;
