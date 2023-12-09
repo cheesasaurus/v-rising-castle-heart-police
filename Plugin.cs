@@ -23,7 +23,7 @@ public class Plugin : BasePlugin
         Logger = Log;
         CastleHeartPoliceConfig.Init(Config);
         var territoryScoresConfig = TerritoryScoresConfig.Init("territoryScores.json");
-        RulesService.InitInstance();
+        RulesService.InitInstance(territoryScoresConfig);
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} version {MyPluginInfo.PLUGIN_VERSION} is loaded!");
 
         // Harmony patching

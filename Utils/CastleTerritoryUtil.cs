@@ -60,4 +60,26 @@ public static class CastleTerritoryUtil {
         return false;
     }
 
+    public static bool TryFindTerritoryOfCastleHeart(Entity heartEntity, out CastleTerritoryInfo territoryInfo) {
+        var entityManager = VWorld.Server.EntityManager;
+        var castleHeart = entityManager.GetComponentData<CastleHeart>(heartEntity);
+        var castleTerritory = entityManager.GetComponentData<CastleTerritory>(castleHeart.CastleTerritoryEntity);
+
+        var mapZoneCollectionSystem = VWorld.Server.GetExistingSystem<MapZoneCollectionSystem>();
+        var mapZoneCollection = mapZoneCollectionSystem.GetMapZoneCollection();
+        
+        if (mapZoneCollection._MapZoneLookup.TryGetValue(castleHeart.CastleTerritoryId, out var spatialZone)) {
+            var blocks = entityManager.GetBuffer<CastleTerritoryBlocks>(spatialZone.ZoneEntity);
+            territoryInfo = new CastleTerritoryInfo() {
+                TerritoryId = castleTerritory.CastleTerritoryIndex,
+                Entity = castleHeart.CastleTerritoryEntity,
+                CastleTerritory = castleTerritory,
+                BlockCount = blocks.Length,
+            };
+            return true;
+        }
+        territoryInfo = default;
+        return false;
+    }
+
 }

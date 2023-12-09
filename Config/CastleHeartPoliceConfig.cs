@@ -1,5 +1,5 @@
 using BepInEx.Configuration;
-using CastleHeartPolice.CastleHeartScore;
+using CastleHeartPolice.CastleHeartScore.Strategies;
 
 namespace CastleHeartPolice.Config;
 
@@ -19,8 +19,8 @@ public static class CastleHeartPoliceConfig {
         CastleHeartScoreStrategy = config.Bind<string>(
             section: "General",
             key: "CastleHeartScoreStrategy",
-            defaultValue: CastleHeartScoreStrategyType.EveryHeartWorthOnePoint,
-            description: "Determines the value of each castle heart."
+            defaultValue: nameof(EveryHeartWorthOnePoint),
+            description: $"Determines the value of each castle heart. ({nameof(EveryHeartWorthOnePoint)} | {nameof(CustomTerritoryScores)})"
         );
         
     }

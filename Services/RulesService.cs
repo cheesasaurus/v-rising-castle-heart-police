@@ -13,8 +13,8 @@ public class RulesService {
 
     public static RulesService Instance {get; private set; }
 
-    public static void InitInstance() {
-        var strategyFactory = new CastleHeartScoreStrategyFactory();
+    public static void InitInstance(TerritoryScoresConfig territoryScoresConfig) {
+        var strategyFactory = new CastleHeartScoreStrategyFactory(territoryScoresConfig);
         var maxCastleHeartScorePerClan = CastleHeartPoliceConfig.MaxCastleHeartScorePerClan.Value;
         var scoreStrategy = strategyFactory.Strategy(CastleHeartPoliceConfig.CastleHeartScoreStrategy.Value);
         Instance = new RulesService(maxCastleHeartScorePerClan, scoreStrategy);

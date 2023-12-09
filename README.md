@@ -11,7 +11,7 @@ Definitions
 - let MaxCastleHeartScorePerClan be a number, specified by the configuration of the server
 - let CastleHeartScoreStrategy be a selectable strategy, specified by the configuration of the server
   - e.g. EveryHeartWorthOnePoint
-  - e.g. CustomTerritoryRatings (with the value of each territory configured in a json file)
+  - e.g. CustomTerritoryScores (with the value of each territory configured in a json file)
 - let the value of any castle heart be determined by the selected CastleHeartScoreStrategy
 
 Rules
@@ -54,11 +54,10 @@ Running the server with this mod installed will create a configuration file at `
 # Default value: 1
 MaxCastleHeartScorePerClan = 1
 
-## Determines the value of each castle heart.
+## Determines the value of each castle heart. (EveryHeartWorthOnePoint | CustomTerritoryScores)
 # Setting type: String
 # Default value: EveryHeartWorthOnePoint
 CastleHeartScoreStrategy = EveryHeartWorthOnePoint
-
 ```
 
 ## Configuring custom scores for territories
