@@ -6,9 +6,9 @@ import { downloadFile, fetchImage, fetchJson, promptLoadLocalFile } from './File
 
 
 const territoryData = await fetchJson('./data/territories.json');
-const territoryById = {};
+const territoryLookup = {};
 for (const territory of territoryData.Territories) {
-    territoryById[territory.CastleTerritoryId] = territory;
+    territoryLookup[territory.CastleTerritoryId] = territory;
 }
 
 const alignment = new Alignment();
@@ -24,7 +24,7 @@ const jsonOutputEl = document.getElementById('output-json');
 let jsonOutput = '';
 const updateJsonOutput = () => {
     const output = {};
-    for (const [territoryId, territory] of Object.entries(territoryById)) {
+    for (const [territoryId, territory] of Object.entries(territoryLookup)) {
         output[territoryId] = territory.Score;
     }
     jsonOutput = JSON.stringify(output, null, "  ");
@@ -36,28 +36,29 @@ const update = () => {
     updateJsonOutput();
 };
 
-const territoryAreas = new TerritoryAreas(territoryById, alignment);
+const mapContainer = document.getElementById('map-container');
+const territoryAreas = new TerritoryAreas(territoryLookup, alignment, mapContainer);
 territoryAreas.init();
 territoryAreas.onScoreEdited(update);
 
-document.getElementById('showBoundingRectangles').addEventListener('change', (event) => {
+document.getElementById('checkbox-show-bounding-rectangles').addEventListener('change', (event) => {
     painterConfig.showBoundingRectangles = !!event.currentTarget.checked;
     mapPainter.paint(painterConfig);
 });
 
-document.getElementById('showTerritoryIds').addEventListener('change', (event) => {
+document.getElementById('checkbox-show-territory-ids').addEventListener('change', (event) => {
     painterConfig.showTerritoryIds = !!event.currentTarget.checked;
     mapPainter.paint(painterConfig);
 });
 
-document.getElementById('download-json').addEventListener('click', () => {
+document.getElementById('btn-download-json').addEventListener('click', () => {
     const file = new File([jsonOutput], 'territoryScores.json', {
         type: 'text/plain',
     });
     downloadFile(file);
 });
 
-document.getElementById('download-map').addEventListener('click', async function() {
+document.getElementById('btn-download-map').addEventListener('click', async function() {
     const imageBlob = await new Promise(resolve => canvas.toBlob(resolve));
     const file = new File([imageBlob], 'territory-map.png', {
         type: 'image/png',
@@ -65,10 +66,10 @@ document.getElementById('download-map').addEventListener('click', async function
     downloadFile(file);
 });
 
-document.getElementById('import-json').addEventListener('click', async function() {
+document.getElementById('btn-import-json').addEventListener('click', async function() {
     const scoresById = JSON.parse(await promptLoadLocalFile('.json'));
     for (const [territoryId, score] of Object.entries(scoresById)) {
-        territoryById[territoryId].Score = score;
+        territoryLookup[territoryId].Score = score;
     }
     update();  
 });

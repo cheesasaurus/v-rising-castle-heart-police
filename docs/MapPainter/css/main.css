@@ -2,11 +2,16 @@ body {
     margin: 0;
 }
 
-#canvas-container {
+main {
+    height: 100vh;
+    width: 100vw;
+}
+
+#map-container {
     position: relative;
 }
 
-#canvas-container canvas {
+#map-container canvas {
     position: absolute;
 }
 
@@ -22,8 +27,6 @@ body {
 .flex-container {
     display: flex;
     overflow: hidden;
-    height: 100%;
-    width: 100%;
 }
 
 #controls-container {
@@ -40,8 +43,9 @@ body {
     text-align: center;
 }
 
-#download-map {
-    margin-top: 20px}
+#btn-download-map {
+    margin-top: 20px;
+}
 
 .output-section {
     margin-top: 50px;
@@ -53,12 +57,7 @@ body {
     height: 300px;
 }
 
-#download-json {
+#btn-download-json {
     margin: 5px;
-}
-
-.main {
-    height: 100vh;
-    width: 100vw;
 }
 

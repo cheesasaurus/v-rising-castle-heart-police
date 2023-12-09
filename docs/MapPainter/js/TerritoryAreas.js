@@ -2,17 +2,18 @@ export default class TerritoryAreas {
     _scoreUpdated;
     territoryLookup;
     alignment;
+    mapContainer;
 
-    constructor(territoryLookup, alignment) {
+    constructor(territoryLookup, alignment, mapContainer) {
         this.territoryLookup = territoryLookup;
         this.alignment = alignment;
+        this.mapContainer = mapContainer
     }
 
     init() {
         const alignment = this.alignment;
-        const canvasContainer = document.getElementById('canvas-container');
-        canvasContainer.style.width = canvas.width + "px";
-        canvasContainer.style.height = canvas.height + "px";
+        this.mapContainer.style.width = canvas.width + "px";
+        this.mapContainer.style.height = canvas.height + "px";
         const scaleDown = alignment.scaleDown;
         for (const territory of Object.values(this.territoryLookup)) {
             const territoryId = territory.CastleTerritoryId;
@@ -36,7 +37,7 @@ export default class TerritoryAreas {
             area.style.height = height + "px";
             area.dataset.territoryId = territoryId;
             area.onclick = () => this.promptEditScore(territoryId);
-            canvasContainer.appendChild(area);
+            this.mapContainer.appendChild(area);
         }
     }
 
