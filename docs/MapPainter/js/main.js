@@ -1,33 +1,27 @@
 import MapPainter from './MapPainter.js';
 import MapPainterConfig from './MapPainterConfig.js';
 import Alignment from './Alignment.js';
+import TerritoryAreas from './TerritoryAreas.js';
 import { downloadFile, fetchImage, fetchJson, promptLoadLocalFile } from './File.js';
 
-const backgroundImage = await fetchImage('./images/map-background.png');
+
 const territoryData = await fetchJson('./data/territories.json');
+const territoryById = {};
+for (const territory of territoryData.Territories) {
+    territoryById[territory.CastleTerritoryId] = territory;
+}
 
 const alignment = new Alignment();
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById('canvas');
 canvas.width = (territoryData.Max.x / alignment.scaleDown) - alignment.offsetX;
 canvas.height = (territoryData.Max.y / alignment.scaleDown);
 
+const backgroundImage = await fetchImage('./images/map-background.png');
 const mapPainter = new MapPainter(canvas, backgroundImage, territoryData, alignment);
 const painterConfig = new MapPainterConfig();
 
-document.getElementById("showBoundingRectangles").addEventListener("change", (event) => {
-    painterConfig.showBoundingRectangles = !!event.currentTarget.checked;
-    mapPainter.paint(painterConfig);
-});
-
-document.getElementById("showTerritoryIds").addEventListener("change", (event) => {
-    painterConfig.showTerritoryIds = !!event.currentTarget.checked;
-    mapPainter.paint(painterConfig);
-});
-
-const territoryById = {};
-
-const jsonOutputEl = document.getElementById("output-json");
-let jsonOutput = "";
+const jsonOutputEl = document.getElementById('output-json');
+let jsonOutput = '';
 const updateJsonOutput = () => {
     const output = {};
     for (const [territoryId, territory] of Object.entries(territoryById)) {
@@ -37,55 +31,33 @@ const updateJsonOutput = () => {
     jsonOutputEl.value = jsonOutput;
 };
 
-const editScore = (territoryId) => {
-    const territory = territoryById[territoryId];
-    const message = "Set value of territory#" + territoryId;
-    const newScore = parseInt(prompt(message, territory.Score));
-    if (!Number.isNaN(newScore)) {
-        territory.Score = newScore;
-    }
+const update = () => {
     mapPainter.paint(painterConfig);
     updateJsonOutput();
-}
+};
 
-const canvasContainer = document.getElementById('canvas-container');
-canvasContainer.style.width = canvas.width + "px";
-canvasContainer.style.height = canvas.height + "px";
-const scaleDown = alignment.scaleDown;
-for (const territory of territoryData.Territories) {
-    const territoryId = territory.CastleTerritoryId;
-    territoryById[territoryId] = territory;
+const territoryAreas = new TerritoryAreas(territoryById, alignment);
+territoryAreas.init();
+territoryAreas.onScoreEdited(update);
 
-    const min = territory.BoundingRectangle.Min;
-    const max = territory.BoundingRectangle.Max;
-    const width = (max.x - min.x) / scaleDown;
-    const height = (max.y - min.y) / scaleDown;
+document.getElementById('showBoundingRectangles').addEventListener('change', (event) => {
+    painterConfig.showBoundingRectangles = !!event.currentTarget.checked;
+    mapPainter.paint(painterConfig);
+});
 
-    // the game y axis goes from bottom to top,
-    // but the canvas y axis goes from top to bottom,
-    const x = (min.x / scaleDown) + alignment.offsetX;
-    const y = canvas.height - (max.y / scaleDown) + alignment.offsetY;
+document.getElementById('showTerritoryIds').addEventListener('change', (event) => {
+    painterConfig.showTerritoryIds = !!event.currentTarget.checked;
+    mapPainter.paint(painterConfig);
+});
 
-    // bounding rectangle
-    const area = document.createElement('div');
-    area.className = 'territory-area';
-    area.style.top = y + "px";
-    area.style.left = x + "px";
-    area.style.width = width + "px";
-    area.style.height = height + "px";
-    area.dataset.territoryId = territoryId;
-    area.onclick = () => editScore(territoryId);
-    canvasContainer.appendChild(area);
-}
-
-document.getElementById("download-json").addEventListener('click', () => {
+document.getElementById('download-json').addEventListener('click', () => {
     const file = new File([jsonOutput], 'territoryScores.json', {
         type: 'text/plain',
     });
     downloadFile(file);
 });
 
-document.getElementById("download-map").addEventListener('click', async function() {
+document.getElementById('download-map').addEventListener('click', async function() {
     const imageBlob = await new Promise(resolve => canvas.toBlob(resolve));
     const file = new File([imageBlob], 'territory-map.png', {
         type: 'image/png',
@@ -93,14 +65,12 @@ document.getElementById("download-map").addEventListener('click', async function
     downloadFile(file);
 });
 
-document.getElementById("import-json").addEventListener('click', async function() {
+document.getElementById('import-json').addEventListener('click', async function() {
     const scoresById = JSON.parse(await promptLoadLocalFile('.json'));
     for (const [territoryId, score] of Object.entries(scoresById)) {
         territoryById[territoryId].Score = score;
     }
-    mapPainter.paint(painterConfig);
-    updateJsonOutput();    
+    update();  
 });
 
-updateJsonOutput();
-mapPainter.paint(painterConfig);
+update();
