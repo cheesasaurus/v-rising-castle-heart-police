@@ -12,6 +12,10 @@ class TerritoryScoresConfig : AbstractJsonConfig {
 
     }
 
+    public override string ToJson() {
+        return JsonSerializer.Serialize(ScoreByTerritoryId);
+    }
+
     protected override void InitDefaults() {
         var territoryCount = 140;
         var defaultScore = 1;
@@ -20,8 +24,8 @@ class TerritoryScoresConfig : AbstractJsonConfig {
         }
     }
 
-    public override string ToJson() {
-        return JsonSerializer.Serialize(ScoreByTerritoryId);
+    protected override void InitFromJson(string json) {
+        ScoreByTerritoryId = JsonSerializer.Deserialize<Dictionary<int, int>>(json);
     }
 
     public static TerritoryScoresConfig Init(string filename) {
