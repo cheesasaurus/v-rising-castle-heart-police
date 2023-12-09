@@ -1,0 +1,11 @@
+{
+    "name": "CastleHeartPolice",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/cheesasaurus/v-rising-castle-heart-police",
+    "description": "Restricts how many / where castle hearts can be placed, on a per-clan basis.",
+    "dependencies": [
+      "BepInEx-BepInExPack_V_Rising-1.668.5",
+      "deca-Bloodstone-0.1.6",
+      "deca-VampireCommandFramework-0.8.0"
+    ]
+  }

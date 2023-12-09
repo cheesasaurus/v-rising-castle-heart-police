@@ -15,8 +15,16 @@
   </PropertyGroup>
 
   <Target Name="Deploy To Dev" AfterTargets="AfterBuild">
-		<Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFolder="$(VRisingServerPath)/BepInEx/BloodstonePlugins" />
-	</Target>
+    <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFolder="$(VRisingServerPath)/BepInEx/BloodstonePlugins" />
+  </Target>
+
+  <Target Name="Thunderstore Dist" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFolder="dist/thunderstore/raw" />
+    <Copy SourceFiles="images/icon.png" DestinationFolder="dist/thunderstore/raw"/>
+    <Copy SourceFiles="README.md" DestinationFolder="dist/thunderstore/raw"/>
+    <Copy SourceFiles="thunderstore.manifest.json" DestinationFiles="dist/thunderstore/raw/manifest.json"/>
+    <ZipDirectory SourceDirectory="dist/thunderstore/raw" DestinationFile="dist/thunderstore/$(AssemblyName).zip" Overwrite="true"></ZipDirectory>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.668" IncludeAssets="compile" />
