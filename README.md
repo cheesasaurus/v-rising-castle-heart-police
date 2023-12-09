@@ -2,6 +2,8 @@
 
 Restricts how many / where castle hearts can be placed, on a per-clan basis.
 
+This is a server-side mod.
+
 
 ## The system
 
@@ -34,7 +36,7 @@ demonstration: https://www.youtube.com/watch?v=pmk5RHCz2_c
 ## Commands
 
 `.territory-info` (`.ti` for short) will give you information about the territory your character is currently in.
-Useful for configuring custom scores for each territory.
+- Useful for players to check how many points a territory is worth.
 
 
 ## Basic Config
